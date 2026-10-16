@@ -45,7 +45,7 @@ class GhostMesinPlatformSeeder
                 ON DUPICATE KEY UPDATE expires_at = DATE_ADD(now(), INTERVAL  24 HOUR)");
 
             $this->pdo->commit();
-            echo "seeder GhostMesh Zero-Knowledge succes 100%"
+            echo "Seeder GhostMesh Zero-Knowledge succes 100%";
         } catch(\throwable $e){
             $this->pdo->rollback();
             throw $e;
