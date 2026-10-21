@@ -23,7 +23,7 @@ class EphemeralRoom
             throw new InvalidArgumentException("Ruang obloran telah mencapai kapasitas maksimal");
         }
         if (!in_array($pubKeyHash, $this->participantHashes, true)){
-            $this->participantHashes[] = $pubKeyHash
+            $this->participantHashes[] = $pubKeyHash;
         }
     }
 
