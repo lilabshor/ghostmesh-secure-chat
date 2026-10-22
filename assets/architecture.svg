@@ -1,0 +1,209 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#040711"/>
+      <stop offset="50%" stop-color="#081026"/>
+      <stop offset="100%" stop-color="#03050c"/>
+    </linearGradient>
+
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1833" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#091024" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <filter id="glow-card" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="14" flood-color="#00f2fe" flood-opacity="0.12"/>
+    </filter>
+
+    <filter id="glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#10b981" flood-opacity="0.18"/>
+    </filter>
+
+    <style>
+      @keyframes pulsePath {
+        0% { stroke-dashoffset: 100; }
+        100% { stroke-dashoffset: 0; }
+      }
+      @keyframes pulseGlow {
+        0%, 100% { opacity: 0.55; }
+        50% { opacity: 1; }
+      }
+      .anim-flow {
+        stroke-dasharray: 8 6;
+        animation: pulsePath 2.4s linear infinite;
+      }
+      .anim-pulse {
+        animation: pulseGlow 2s ease-in-out infinite;
+      }
+      text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+      .code-font {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+    </style>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="1200" height="680" fill="url(#bg-grad)"/>
+
+  <!-- Subtle Cyberpunk Grid Overlay -->
+  <g opacity="0.12">
+    <path d="M0,70 H1200 M0,140 H1200 M0,210 H1200 M0,280 H1200 M0,350 H1200 M0,420 H1200 M0,490 H1200 M0,560 H1200 M0,630 H1200" stroke="#38bdf8" stroke-width="0.5"/>
+    <path d="M100,0 V680 M200,0 V680 M300,0 V680 M400,0 V680 M500,0 V680 M600,0 V680 M700,0 V680 M800,0 V680 M900,0 V680 M1000,0 V680 M1100,0 V680" stroke="#38bdf8" stroke-width="0.5"/>
+  </g>
+
+  <!-- Header Section -->
+  <g transform="translate(55, 34)">
+    <rect x="0" y="0" width="195" height="24" rx="12" fill="#0369a1" fill-opacity="0.3" stroke="#0284c7" stroke-width="1"/>
+    <circle cx="13" cy="12" r="4" fill="#38bdf8" class="anim-pulse"/>
+    <text x="25" y="16" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="1">SYSTEM ARCHITECTURE</text>
+
+    <text x="0" y="54" fill="#ffffff" font-size="24" font-weight="800" letter-spacing="-0.5">GhostMesh - Zero-Knowledge Secure Chat</text>
+    <text x="0" y="75" fill="#94a3b8" font-size="13">Strict In-Memory RAM | X25519 ECDH + HKDF | Blind WebSocket Relay | WebRTC P2P Voice Mesh</text>
+  </g>
+
+  <!-- Meta Badges (Right Header) -->
+  <g transform="translate(895, 34)">
+    <rect x="0" y="0" width="250" height="46" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="15" y="18" fill="#64748b" font-size="10" font-weight="600">ZERO TRACE VERIFICATION</text>
+    <text x="15" y="36" fill="#10b981" font-size="12" font-weight="700">Strict In-Memory | E2EE Active</text>
+  </g>
+
+  <!-- Zone 1: Client In-Memory RAM (Left Column) -->
+  <rect x="45" y="130" width="280" height="515" rx="12" fill="#0b1329" fill-opacity="0.7" stroke="#334155" stroke-dasharray="4 4" stroke-width="1.5"/>
+  <text x="65" y="158" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="1.5">01 / CLIENT BROWSER (STRICT RAM)</text>
+
+  <!-- Card 1A: Anonymous Identity & WebCrypto -->
+  <g transform="translate(60, 175)" filter="url(#glow-card)">
+    <rect width="250" height="125" rx="8" fill="url(#card-grad)" stroke="#0284c7" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Ephemeral Cryptographic Identity</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">X25519 Keypair (WebCrypto API)</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">16-Hex Routing Token</text>
+    <text x="16" y="78" fill="#94a3b8" font-size="11">Procedural Monogram Avatar</text>
+    <rect x="16" y="92" width="218" height="20" rx="4" fill="#0284c7" fill-opacity="0.2"/>
+    <text x="24" y="106" fill="#38bdf8" class="code-font" font-size="10">Zero disk / Zero localStorage</text>
+  </g>
+
+  <!-- Card 1B: Multi-Channel & Session Key -->
+  <g transform="translate(60, 315)" filter="url(#glow-card)">
+    <rect width="250" height="135" rx="8" fill="url(#card-grad)" stroke="#0284c7" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Multi-Channel RAM State</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">Map: state.conversations</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">HKDF-SHA-256 Symmetric Derivation</text>
+    <text x="16" y="78" fill="#94a3b8" font-size="11">AES-GCM-256 (12-byte Nonce)</text>
+    <rect x="16" y="96" width="218" height="24" rx="4" fill="#ef4444" fill-opacity="0.15"/>
+    <text x="24" y="112" fill="#f87171" font-size="10" font-weight="600">Burn Timers: 5s / 30s / 5m Purge</text>
+  </g>
+
+  <!-- Card 1C: Hashcash Solver -->
+  <g transform="translate(60, 465)" filter="url(#glow-card)">
+    <rect width="250" height="155" rx="8" fill="url(#card-grad)" stroke="#0284c7" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Proof-of-Work Anti-Spam</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">Algorithm: Hashcash SHA-256</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">Difficulty: 12-16 Leading Zero Bits</text>
+    <text x="16" y="78" fill="#94a3b8" font-size="11">Yielding non-blocking web event loop</text>
+    <rect x="16" y="96" width="218" height="42" rx="4" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="24" y="114" fill="#64748b" font-size="9">CHALLENGE &amp; SOLUTION</text>
+    <text x="24" y="128" fill="#38bdf8" class="code-font" font-size="10">POW_CHALLENGE -> POW_SOLUTION</text>
+  </g>
+
+  <!-- Flow 1 to 2 Connector -->
+  <path d="M310,237 H420" stroke="#00f2fe" stroke-width="2" class="anim-flow"/>
+  <polygon points="420,233 428,237 420,241" fill="#00f2fe"/>
+  <rect x="330" y="215" width="80" height="18" rx="4" fill="#060d1f" stroke="#0284c7" stroke-width="0.8"/>
+  <text x="338" y="228" fill="#38bdf8" font-size="9" font-weight="600">WSS / TCP</text>
+
+  <!-- Zone 2: Transport & WebSocket Relay (Center-Left) -->
+  <rect x="425" y="130" width="295" height="515" rx="12" fill="#0b1329" fill-opacity="0.7" stroke="#334155" stroke-dasharray="4 4" stroke-width="1.5"/>
+  <text x="445" y="158" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="1.5">02 / PHP WEBSOCKET RELAY DAEMON</text>
+
+  <!-- Card 2A: Socket Reactor Daemon -->
+  <g transform="translate(440, 175)" filter="url(#glow-card)">
+    <rect width="265" height="145" rx="8" fill="url(#card-grad)" stroke="#0ea5e9" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Non-Blocking Socket Reactor</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">Daemon: bin/websocket_relay_daemon.php</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">spl_object_id() Descriptor Tracker</text>
+    <text x="16" y="78" fill="#94a3b8" font-size="11">RFC 6455 Frame Encode &amp; Decode</text>
+    <rect x="16" y="96" width="233" height="34" rx="4" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+    <text x="24" y="112" fill="#64748b" font-size="9">SOCKET READ CONCURRENCY</text>
+    <text x="24" y="124" fill="#10b981" class="code-font" font-size="10">EAGAIN / EWOULDBLOCK Resilient</text>
+  </g>
+
+  <!-- Card 2B: Blind Routing & Envelope Engine -->
+  <g transform="translate(440, 335)" filter="url(#glow-card)">
+    <rect width="265" height="150" rx="8" fill="url(#card-grad)" stroke="#0ea5e9" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Blind Routing Token Dispatcher</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">Destination Token Multiplexing</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">Auto-Flush Memory Queue on Register</text>
+    <text x="16" y="78" fill="#94a3b8" font-size="11">Handshake Relay: INIT -> RESP</text>
+    <rect x="16" y="98" width="233" height="24" rx="4" fill="#0369a1" fill-opacity="0.25"/>
+    <text x="24" y="114" fill="#38bdf8" font-size="10" font-weight="600">Zero Content Inspection (Ciphertext Only)</text>
+  </g>
+
+  <!-- Card 2C: WebRTC Signaling Proxy -->
+  <g transform="translate(440, 500)" filter="url(#glow-card)">
+    <rect width="265" height="120" rx="8" fill="url(#card-grad)" stroke="#0ea5e9" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">WebRTC Signal Session Proxy</text>
+    <text x="16" y="42" fill="#94a3b8" font-size="11">Relays SDP Offer / SDP Answer</text>
+    <text x="16" y="60" fill="#94a3b8" font-size="11">ICE Candidates Exchange</text>
+    <rect x="16" y="78" width="233" height="26" rx="4" fill="#10b981" fill-opacity="0.15"/>
+    <text x="24" y="95" fill="#34d399" font-size="10" font-weight="600">Direct P2P Audio Handover</text>
+  </g>
+
+  <!-- Flow 2 to 3 Connector -->
+  <path d="M705,390 H805" stroke="#00f2fe" stroke-width="2" class="anim-flow"/>
+  <polygon points="805,386 813,390 805,394" fill="#00f2fe"/>
+  <rect x="725" y="368" width="65" height="18" rx="4" fill="#060d1f" stroke="#0284c7" stroke-width="0.8"/>
+  <text x="733" y="381" fill="#38bdf8" font-size="9" font-weight="600">PDO SQL</text>
+
+  <!-- Zone 3: MySQL Ephemeral Persistence (Right Column) -->
+  <rect x="815" y="130" width="340" height="325" rx="12" fill="#0b1329" fill-opacity="0.7" stroke="#334155" stroke-dasharray="4 4" stroke-width="1.5"/>
+  <text x="835" y="158" fill="#38bdf8" font-size="11" font-weight="700" letter-spacing="1.5">03 / MYSQL 8.0 EPHEMERAL STORAGE</text>
+
+  <!-- Card 3A: Schema & Tables -->
+  <g transform="translate(830, 175)" filter="url(#glow-card)">
+    <rect width="310" height="135" rx="8" fill="url(#card-grad)" stroke="#6366f1" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Relational Cryptographic Schema</text>
+    <text x="16" y="44" fill="#a5b4fc" class="code-font" font-size="11">• identity_prekey_bundles</text>
+    <text x="16" y="62" fill="#a5b4fc" class="code-font" font-size="11">• blind_message_queues</text>
+    <text x="16" y="80" fill="#a5b4fc" class="code-font" font-size="11">• blind_rendezvous_tokens</text>
+    <text x="16" y="98" fill="#a5b4fc" class="code-font" font-size="11">• webrtc_signaling_sessions</text>
+    <rect x="16" y="106" width="278" height="20" rx="4" fill="#6366f1" fill-opacity="0.15"/>
+    <text x="24" y="120" fill="#c7d2fe" font-size="10">Zero-setup: /docker-entrypoint-initdb.d</text>
+  </g>
+
+  <!-- Card 3B: Auto-Purge Event Scheduler -->
+  <g transform="translate(830, 325)" filter="url(#glow-card)">
+    <rect width="310" height="115" rx="8" fill="url(#card-grad)" stroke="#6366f1" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Automated Purge Schedulers</text>
+    <text x="16" y="44" fill="#94a3b8" font-size="11">MySQL EVENT: ghostmesh_purge_expired</text>
+    <text x="16" y="62" fill="#94a3b8" font-size="11">Interval: EVERY 5 MINUTE</text>
+    <rect x="16" y="78" width="278" height="24" rx="4" fill="#ef4444" fill-opacity="0.15"/>
+    <text x="24" y="94" fill="#f87171" font-size="10" font-weight="600">DELETE WHERE expires_at &lt; NOW()</text>
+  </g>
+
+  <!-- Zone 4: P2P WebRTC Direct Mesh (Bottom Right) -->
+  <rect x="815" y="470" width="340" height="175" rx="12" fill="#061c16" fill-opacity="0.6" stroke="#059669" stroke-dasharray="4 4" stroke-width="1.5" filter="url(#glow-emerald)"/>
+  <text x="835" y="498" fill="#34d399" font-size="11" font-weight="700" letter-spacing="1.5">04 / DIRECT P2P MEDIA MESH (WEBRTC)</text>
+
+  <g transform="translate(830, 515)">
+    <rect width="310" height="115" rx="8" fill="#06261d" stroke="#10b981" stroke-width="1"/>
+    <text x="16" y="24" fill="#ffffff" font-size="13" font-weight="700">Direct End-to-End Voice Stream</text>
+    <text x="16" y="44" fill="#6ee7b7" font-size="11">• DTLS-SRTP Audio Encryption</text>
+    <text x="16" y="62" fill="#6ee7b7" font-size="11">• Bypass Central Server for Media</text>
+    <text x="16" y="80" fill="#6ee7b7" font-size="11">• Low-latency Peer-to-Peer Voice Call</text>
+    <rect x="16" y="90" width="278" height="16" rx="3" fill="#10b981" fill-opacity="0.2"/>
+    <text x="24" y="102" fill="#a7f3d0" font-size="9" font-weight="700">Zero Server Interception on Audio</text>
+  </g>
+
+  <!-- Direct P2P Arch Line between Zone 1 and Zone 4 -->
+  <path d="M200,645 Q 600,740 985,645" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6 6" class="anim-flow"/>
+  <rect x="525" y="652" width="150" height="20" rx="10" fill="#061c16" stroke="#10b981" stroke-width="1"/>
+  <text x="535" y="666" fill="#34d399" font-size="10" font-weight="700">P2P ENCRYPTED VOICE</text>
+</svg>
