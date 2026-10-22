@@ -1,15 +1,15 @@
 {
-  "name": "ghostmest",
-  "description" : "self-hosted anonymous real time messaging & zero knowledge P2P platform",
-  "type" : "project",
-  "license" : "MIT",
-  "authors" : [
+  "name": "ghostmesh/secure-chat",
+  "description": "self-hosted anonymous real time messaging & zero knowledge P2P platform",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
     {
-      "name" : "lil abshor",
-      "role" : "lead Cryptographer & Systems Architect"
+      "name": "lil abshor",
+      "role": "lead Cryptographer & Systems Architect"
     }
   ],
-  "require" : {
+  "require": {
     "php": ">=8.2",
     "ext-sodium": "*",
     "ext-openssl": "*",
@@ -18,7 +18,11 @@
   },
   "autoload": {
     "psr-4": {
-      "GhostMesh\\" : "src/"
+      "GhostMesh\\Config\\": "config/",
+      "GhostMesh\\Security\\": "Security/",
+      "GhostMesh\\Repository\\": "Repository/",
+      "GhostMesh\\Service\\": "Service/",
+      "GhostMesh\\": "src/"
     }
   }
 }
