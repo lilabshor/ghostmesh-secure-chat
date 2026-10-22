@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GhostMesh — self-hosted zero-knowledge encrypted chat. No registration. No logs. No servers can read your messages.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' ws: wss: stun:; worker-src 'self'; media-src 'self'">
+    <title>GhostMesh — Zero-Knowledge Secure Chat</title>
+    <link rel="stylesheet" href="/css/cyberpunk.css">
+</head>
+<body>
+
+<header id="topbar">
+    <div id="topbar-logo">
+        <div class="logo-icon">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 2L13 5V11L8 14L3 11V5L8 2Z"/>
+                <circle cx="8" cy="8" r="2"/>
+            </svg>
+        </div>
+        <div>
+            <div class="logo-text">GhostMesh</div>
+            <div class="logo-sub">Zero-Knowledge E2EE</div>
+        </div>
+    </div>
+    <div id="topbar-spacer"></div>
+    <div id="fingerprint-badge" title="Your ephemeral public key fingerprint"></div>
+    <div id="status-indicator">
+        <div id="status-dot"></div>
+        <span id="status-text">initializing</span>
+    </div>
+</header>
+
+<div id="app">
+    <!-- Sidebar: Session / Threema Multi-Conversation List -->
+    <aside id="sidebar">
+        <!-- Self Identity -->
+        <div class="sidebar-identity">
+            <div class="sidebar-label">your routing token</div>
+            <div class="key-display" id="my-token-display" title="Click to copy token">—</div>
+        </div>
+
+        <!-- Action bar -->
+        <div class="sidebar-actions-bar">
+            <div class="section-title">Channels (<span id="conv-count">0</span>)</div>
+            <button class="btn btn-primary btn-sm" id="btn-open-new-chat">+ New Chat</button>
+        </div>
+
+        <!-- Filter / Search -->
+        <div class="sidebar-search-box">
+            <input type="text" id="contact-search-input" placeholder="filter channels..." autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Conversation Items -->
+        <div id="conversation-list">
+            <div class="conv-empty" id="conv-empty-state">
+                No active channels.<br>Click <strong>+ New Chat</strong> to initiate end-to-end encrypted messaging.
+            </div>
+        </div>
+
+        <!-- Sidebar footer -->
+        <div class="sidebar-footer">
+            <button class="btn btn-ghost btn-sm btn-full" id="btn-regenerate-keys">Regenerate Identity</button>
+            <button class="btn btn-danger btn-sm btn-full" id="btn-burn-all">Burn All Channels</button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main id="main">
+        <!-- Header for active contact -->
+        <div id="chat-header" class="hidden">
+            <div class="chat-header-peer">
+                <div class="chat-header-avatar" id="chat-peer-avatar">GM</div>
+                <div class="chat-header-meta">
+                    <div class="chat-header-title" id="chat-peer-name">—</div>
+                    <div class="chat-header-token" id="chat-peer-token" title="Click to copy peer token">—</div>
+                </div>
+            </div>
+
+            <div class="chat-header-controls">
+                <!-- Burn selector -->
+                <div class="burn-selector-compact" id="chat-burn-chips" title="Ephemeral burn timer">
+                    <div class="burn-chip" data-policy="BURN_ON_READ">read</div>
+                    <div class="burn-chip active" data-policy="BURN_30S">30s</div>
+                    <div class="burn-chip" data-policy="BURN_5M">5m</div>
+                    <div class="burn-chip" data-policy="NEVER">off</div>
+                </div>
+
+                <!-- WebRTC call triggers -->
+                <button class="webrtc-btn" id="btn-call" title="Start audio call">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M2 3C2 2.4 2.5 2 3 2H5.5L7 5.5L5.5 7C6.2 8.5 7.5 9.8 9 10.5L10.5 9L14 10.5V13C14 13.6 13.6 14 13 14C6.4 13.7 2.3 9.6 2 3Z"/>
+                    </svg>
+                    call
+                </button>
+                <button class="webrtc-btn" id="btn-hangup" title="Hangup call">
+                    <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M2 8C2 8 4 5 8 5S14 8 14 8"/>
+                        <line x1="3" y1="3" x2="13" y2="13"/>
+                    </svg>
+                    end
+                </button>
+
+                <!-- Burn single conversation -->
+                <button class="btn btn-danger btn-sm" id="btn-burn-active-chat" title="Burn this channel from memory">Burn</button>
+            </div>
+        </div>
+
+        <!-- WebRTC in-call status bar -->
+        <div id="webrtc-panel">
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent-green);">audio call connected</span>
+            <div id="call-timer">00:00</div>
+        </div>
+
+        <!-- Messages scroll container -->
+        <div id="messages">
+            <div id="empty-state">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M24 6L42 16V32L24 42L6 32V16L24 6Z"/>
+                    <circle cx="24" cy="24" r="6"/>
+                    <line x1="24" y1="6" x2="24" y2="18"/>
+                    <line x1="24" y1="30" x2="24" y2="42"/>
+                    <line x1="6" y1="16" x2="16" y2="22"/>
+                    <line x1="32" y1="26" x2="42" y2="32"/>
+                </svg>
+                <div class="empty-title">no active channel selected</div>
+                <div class="empty-sub">Choose a contact from the sidebar or click <strong>+ New Chat</strong> to establish a zero-knowledge channel.</div>
+            </div>
+        </div>
+
+        <!-- Compose bar -->
+        <div id="compose-area">
+            <div id="compose-row">
+                <textarea id="compose-input" placeholder="select a channel to message" rows="1" disabled></textarea>
+                <button class="btn btn-primary" id="btn-send" disabled>
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M2 14L14 8L2 2V7L10 8L2 9V14Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal: New Chat Dialog -->
+<div class="modal-overlay hidden" id="modal-new-chat">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title">Initiate Encrypted Channel</div>
+            <button class="modal-close-btn" id="btn-modal-close" aria-label="Close modal">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <line x1="3" y1="3" x2="13" y2="13"/>
+                    <line x1="13" y1="3" x2="3" y2="13"/>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+                <div class="input-label">Peer routing token (16+ hex characters)</div>
+                <input type="text" id="new-chat-token" placeholder="paste destination token" autocomplete="off" spellcheck="false">
+            </div>
+            <div class="input-group">
+                <div class="input-label">Channel alias (optional, local-only)</div>
+                <input type="text" id="new-chat-alias" placeholder="e.g. Alice / Operator (optional)" autocomplete="off" spellcheck="false" maxlength="24">
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="btn-modal-cancel">Cancel</button>
+            <button class="btn btn-primary" id="btn-modal-submit">Connect & Handshake</button>
+        </div>
+    </div>
+</div>
+
+<!-- PoW challenge overlay -->
+<div id="pow-overlay" class="hidden">
+    <div id="pow-box">
+        <div class="spinner"></div>
+        <div class="pow-title">Proof-of-Work</div>
+        <div class="pow-sub">Solving anti-spam challenge before connecting to relay.</div>
+        <div id="pow-progress"><div id="pow-progress-bar"></div></div>
+        <div id="pow-nonce-display">nonce: —</div>
+    </div>
+</div>
+
+<div id="toast-container"></div>
+<audio id="remote-audio" autoplay playsinline hidden></audio>
+
+<script src="/js/crypto_client_engine.js"></script>
+<script src="/js/webrtc_p2p_mesh.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
