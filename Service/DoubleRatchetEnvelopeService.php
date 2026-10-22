@@ -35,7 +35,7 @@ class DoubleRatchetEnvelopeService
 
         return new E2eeCiphertextEnvelope(
             inboxRoutingToken: $inboxToken,
-            ephemeralSenderPubKeyHex: $senderPubkeyHex,
+            ephemeralSenderPubkeyHex: $senderPubkeyHex,
             ciphertextHex: bin2hex($rawCipher),
             nonceHex: bin2hex($nonce),
             macTagHex: bin2hex($tag),
