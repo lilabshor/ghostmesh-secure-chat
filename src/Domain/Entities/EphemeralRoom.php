@@ -3,26 +3,28 @@ declare(strict_types=1);
 
 namespace GhostMesh\Domain\Entities;
 
-use GHostMesh\Domain\Enums\BurnTimerPolicy;
-USE InvalidArgumentException;
+use GhostMesh\Domain\Enums\BurnTimerPolicy;
+use InvalidArgumentException;
 
 class EphemeralRoom
 {
     public array $participantHashes = [];
+
     public function __construct(
-        public readonly int $id,
-        public readonly string $roomHash,
-        public readonly int $maxParticipants,
+        public readonly int             $id,
+        public readonly string          $roomHash,
+        public readonly int             $maxParticipants,
         public readonly BurnTimerPolicy $burnPolicy,
-        public readonly int $autoDestroyTimestamp
-    ){}
+        public readonly int             $autoDestroyTimestamp
+    ) {}
 
     public function addParticipant(string $pubKeyHash): void
     {
-        if (count ($this->participantHashes) >= $this->maxParticipants){
-            throw new InvalidArgumentException("Ruang obloran telah mencapai kapasitas maksimal");
+        if (count($this->participantHashes) >= $this->maxParticipants) {
+            throw new InvalidArgumentException('room sudah mencapai kapasitas maksimal');
         }
-        if (!in_array($pubKeyHash, $this->participantHashes, true)){
+
+        if (!in_array($pubKeyHash, $this->participantHashes, true)) {
             $this->participantHashes[] = $pubKeyHash;
         }
     }
@@ -31,7 +33,4 @@ class EphemeralRoom
     {
         return $currentTimestamp >= $this->autoDestroyTimestamp;
     }
-
-
-
 }
