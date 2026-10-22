@@ -1,0 +1,71 @@
+services:
+  ghostmesh:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: ghostmesh_relay
+    restart: unless-stopped
+    environment:
+      WS_HOST: "0.0.0.0"
+      WS_PORT: "9000"
+      WS_MAX_CONN: "500"
+      POW_BITS: "16"
+      SIGNAL_TTL: "300"
+      MSG_TTL: "3600"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_DATABASE: "ghostmesh_db"
+      DB_USERNAME: "ghostmesh"
+      DB_PASSWORD: "${DB_PASSWORD:-ghostmesh_secret_2026}"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ghostmesh_net
+    expose:
+      - "9000"
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: ghostmesh_nginx
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../public:/var/www/html:ro
+      - ${TLS_CERT_DIR:-./certs}:/etc/nginx/certs:ro
+    depends_on:
+      - ghostmesh
+    networks:
+      - ghostmesh_net
+
+  db:
+    image: mysql:8.0
+    container_name: ghostmesh_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "ghostmesh_db"
+      MYSQL_USER: "ghostmesh"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-ghostmesh_secret_2026}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root_secret_2026}"
+    volumes:
+      - ghostmesh_db_data:/var/lib/mysql
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    networks:
+      - ghostmesh_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "ghostmesh", "-p${DB_PASSWORD:-ghostmesh_secret_2026}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  ghostmesh_net:
+    driver: bridge
+    internal: false
+
+volumes:
+  ghostmesh_db_data:
+    driver: local
